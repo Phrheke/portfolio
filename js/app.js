@@ -537,6 +537,63 @@
     }
   }
 
+
+  // ---------- scroll animations: headings rise word by word, images wipe in, cards follow one another ----------
+  function initMotion() {
+    if (reduceMotion || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('js-motion');
+    const splitWords = h => {
+      if (h.dataset.split) return;
+      h.dataset.split = '1';
+      const words = h.textContent.trim().split(/\s+/);
+      h.textContent = '';
+      words.forEach((w, i) => {
+        const outer = el('span', { class: 'w', style: `--wi:${i}` }, el('span', { text: w }));
+        h.append(outer, i < words.length - 1 ? ' ' : '');
+      });
+      h.classList.add('split');
+      h.setAttribute('aria-label', words.join(' '));
+    };
+    const targets = [];
+    const add = (node, cls, delay = 0) => { if (!node || node.classList.contains('rv') || node.classList.contains('rv-img') || node.classList.contains('split')) return; node.classList.add(cls); node.style.setProperty('--rd', `${delay}ms`); targets.push(node); };
+    $$('main h2, .p-head h1').forEach(h => { if (h.closest('.hero')) return; splitWords(h); targets.push(h); });
+    const groups = [
+      ['.hero-role, .hero-side > *', 'rv', 90],
+      ['.way', 'rv', 120], ['.way-body, .services, .way-actions', 'rv', 60],
+      ['.p-card', 'rv', 110], ['.process-head p', 'rv', 0], ['.step', 'rv', 120],
+      ['.about-copy > div, .about-tools, .about-experience', 'rv', 90], ['.quote', 'rv', 120],
+      ['.contact-copy > p, .contact-copy > ul', 'rv', 80], ['.contact-form', 'rv', 150],
+      ['.p-facts > div', 'rv', 60], ['.b-text, .b-stage, .b-quote, .b-video', 'rv', 0],
+    ];
+    groups.forEach(([sel, cls, step]) => {
+      const byParent = new Map();
+      $$(sel).forEach(n => { const k = n.parentElement; byParent.set(k, (byParent.get(k) ?? -1) + 1); add(n, cls, byParent.get(k) * step); });
+    });
+    $$('.about-photo-wrap, .p-cover, .b-image, .b-gallery-grid > *').forEach((n, i) => add(n, 'rv-img', 0));
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    targets.forEach(t => io.observe(t));
+
+    // Depth: gallery columns and hero colour fields drift at different speeds while scrolling
+    const cols = () => $$('.g-col');
+    const glows = $$('.glow');
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const wide = window.innerWidth > 700;
+        cols().forEach((c, i) => { c.style.transform = wide && y < 2000 ? `translateY(${(i % 2 ? -1 : 1) * y * 0.05}px)` : ''; });
+        glows.forEach((g, i) => { g.style.transform = `translate3d(0, ${y * (0.12 + i * 0.06)}px, 0)`; });
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
   // ---------- boot ----------
   function fail() {
     const msg = 'The portfolio content didn’t load. Refresh the page to try again.';
@@ -558,8 +615,9 @@
           try { fn(); } catch (err) { console.error(fn.name, err); }
         });
         navMarker();
+        initMotion();
       } else if (page === 'project') {
-        try { renderProject(); } catch (err) { console.error(err); fail(); }
+        try { renderProject(); initMotion(); } catch (err) { console.error(err); fail(); }
       }
     })
     .catch(err => { console.error(err); fail(); });
