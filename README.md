@@ -32,12 +32,18 @@ The site is hosted free on Netlify. The admin saves your changes to GitHub, and 
 The right-hand side of every editing screen shows a live preview in the site's own styles.
 
 ## Why it doesn't break
-- **Length limits** on every field in the admin, with the limit written under the field. The build step also shortens anything that slips past.
-- **Any image size or shape.** The gallery and project pages keep each image's shape. Cards crop to a fixed frame, and you choose which part stays in view. On Netlify, large uploads are resized automatically, so a 10 MB photo still loads fast.
-- **Missing or deleted images** show a quiet "Image not found" box instead of a broken icon. A project with a missing cover uses its first image instead.
+
+Tested with deliberately extreme content: 30 gallery images from a 1:5 strip to a 5:1 panorama, a 40-pixel thumbnail, an iPhone HEIC photo, 18 projects with very long titles and summaries, 6 process steps with two feedback loops, 6 client quotes, 12 jobs, 20 tools, and a 50-character name. Then the opposite: one image, no projects, no photo.
+
+- **Length limits** on every admin field, with the limit written under the field. The build step shortens anything that slips past, at a word break.
+- **Too much:** the gallery shows 12 images and the projects 9, each with a "Show all" button. Long titles and summaries are trimmed on cards and shown in full on the project page.
+- **Too little:** one or two gallery images keep a sensible width instead of stretching. Empty sections (no projects, quotes, experience, CV, social links, or fewer than 2 process steps) don't appear, or show a short placeholder.
+- **Any image shape or size:** the gallery and project pages keep each image's shape. Extremely tall images are capped in the gallery and shown whole when opened. Cards crop to a fixed frame, and you choose which part stays in view. On Netlify, large uploads are resized automatically. Uploads over 15 MB are refused in the admin.
+- **Wrong formats:** iPhone HEIC, TIFF and PSD files are flagged in the deploy log and show a message asking for JPG, PNG or WebP, instead of a broken image.
+- **Missing or deleted images** show a quiet placeholder. A project with a missing cover uses its first image. A gallery link to a deleted project is dropped.
+- **Long names** shrink to fit instead of breaking mid-word, on both the page and the header.
 - **Mistakes in content** (an unknown block, a bad video link, a broken file) are skipped with a warning in the Netlify deploy log. The site still builds.
-- **Text is always inserted as text**, so nothing typed into the admin can break the page layout or inject code.
-- Empty sections (no quotes yet, no experience, no CV, no social links) simply don't appear.
+- **Text is always inserted as text**, so nothing typed into the admin can break the layout or inject code.
 
 ## Before launch
 - [ ] Replace the 9 sample gallery images and 3 sample projects (they say "Replace in /admin").

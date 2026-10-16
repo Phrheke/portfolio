@@ -40,6 +40,7 @@
   function canResize(img) { return data?.site?.image_cdn && img && !img.external && !/\.(svg|gif)$/i.test(img.src); }
   function picture(img, { alt = '', sizes = '100vw', eager = false, cls = '' } = {}) {
     if (!img || !img.src) return missing('Image missing');
+    if (img.unsupported) return missing('This image format can\u2019t be shown. Upload a JPG, PNG or WebP.', img);
     if (img.missing) return missing('Image not found', img);
     const attrs = { src: img.src, alt, class: cls || null, decoding: 'async', loading: eager ? 'eager' : 'lazy' };
     if (img.w && img.h) { attrs.width = img.w; attrs.height = img.h; }
@@ -64,7 +65,8 @@
     const ar = img && img.w && img.h ? `${img.w}/${img.h}` : '4/3';
     return el('div', { class: 'img-missing', style: `--ar:${ar}`, role: 'img', 'aria-label': label, text: label });
   }
-  const ratio = img => (img && img.w && img.h ? img.h / img.w : 1.25);
+  // Very tall images are capped in grids (they still open whole in the viewer)
+  const ratio = img => Math.min(img && img.w && img.h ? img.h / img.w : 1.25, 1.8);
 
   // ---------- site-wide ----------
   const ICONS = {
@@ -177,6 +179,10 @@
   // ---------- home: hero + gallery ----------
   function renderHero() {
     const s = data.site;
+    // Long names get a smaller size instead of breaking mid-word
+    const longest = Math.max(...s.name.split(/\s+/).map(w => w.length));
+    const scale = Math.min(1, 9 / Math.max(longest, 1), 22 / Math.max(s.name.length, 1) * 1.4);
+    $('#hero-name').style.fontSize = `calc(var(--t-name) * ${Math.max(0.42, scale).toFixed(3)})`;
     setText('#hero-role', [s.role, s.location].filter(Boolean).join(', '));
     setText('#hero-intro', s.intro);
     const items = [];
@@ -199,14 +205,23 @@
         it.project ? el('a', { href: `project.html?p=${encodeURIComponent(it.project)}`, text: 'View project' }) : null) : null;
       return { node: el('figure', { class: 'g-item', style: `--i:${i}` }, btn, cap), h: ratio(it.image) };
     });
+    const LIMIT = 12;
+    let showAll = nodes.length <= LIMIT;
+    let more = null;
+    if (!showAll) {
+      more = el('button', { type: 'button', class: 'btn btn-quiet show-more', text: `Show all ${nodes.length} images` });
+      more.addEventListener('click', () => { showAll = true; cols = 0; layout(); more.remove(); });
+      root.after(more);
+    }
     let cols = 0;
     const layout = () => {
       const w = root.clientWidth || window.innerWidth;
-      const n = Math.min(nodes.length, w >= 1100 ? 4 : w >= 700 ? 3 : 2);
+      const shown = showAll ? nodes : nodes.slice(0, LIMIT);
+      const n = Math.min(shown.length, w >= 1100 ? 4 : w >= 700 ? 3 : 2);
       if (n === cols) return;
       cols = n;
       const columns = Array.from({ length: n }, () => ({ el: el('div', { class: 'g-col' }), h: 0 }));
-      nodes.forEach(item => {
+      shown.forEach(item => {
         const c = columns.reduce((a, b) => (b.h < a.h ? b : a));
         c.el.append(item.node);
         c.h += item.h + 0.12; // 0.12 accounts for the caption and gap
@@ -243,16 +258,24 @@
   function renderProjects() {
     const list = data.projects.filter(p => p.featured);
     $('#projects-empty').hidden = list.length > 0;
-    fill($('#projects'), list.map(p => {
+    const LIMIT = 9;
+    fill($('#projects'), list.map((p, idx) => {
       const media = el('div', { class: 'p-card-media' }, picture(p.cover, { alt: '', sizes: '(max-width: 640px) 100vw, (max-width: 960px) 50vw, 33vw' }));
       const img = $('img', media);
       if (img) img.style.objectPosition = `center ${p.cover_focus}`;
-      return el('a', { class: 'p-card', href: `project.html?p=${encodeURIComponent(p.slug)}` },
+      return el('a', { class: `p-card${idx >= LIMIT ? ' is-extra' : ''}`, href: `project.html?p=${encodeURIComponent(p.slug)}` },
         media,
         projectMeta(p) ? el('p', { class: 'p-card-meta', text: projectMeta(p) }) : null,
         el('h3', { text: p.title }),
         p.summary ? el('p', { class: 'p-card-summary', text: p.summary }) : null);
     }));
+    if (list.length > LIMIT) {
+      const grid = $('#projects');
+      grid.classList.add('is-collapsed');
+      const more = el('button', { type: 'button', class: 'btn btn-quiet show-more', text: `Show all ${list.length} projects` });
+      more.addEventListener('click', () => { grid.classList.remove('is-collapsed'); grid.querySelectorAll('.is-extra').forEach(c => c.classList.add('in')); more.remove(); });
+      grid.after(more);
+    }
   }
 
   // ---------- home: process loop ----------
@@ -295,7 +318,7 @@
         label.setAttribute('x', (x0 + x1) / 2);
         label.setAttribute('y', y - lift + 2);
         label.setAttribute('text-anchor', 'middle');
-        label.textContent = pr.loop_label;
+        label.textContent = loops.length > 1 ? `Back to ${pr.steps[i - 1].title}` : pr.loop_label;
         svg.append(path, head, label);
         if (animate && !reduceMotion) {
           svg.classList.add('will-draw');
@@ -513,19 +536,54 @@
 
     if (rail.length > 1) {
       $('#p-layout').classList.add('has-rail');
-      $('#p-rail').hidden = false;
-      const links = rail.map(r => el('a', { href: `#${r.id}`, text: r.label }));
+      const railEl = $('#p-rail');
+      railEl.hidden = false;
+      const links = rail.map(r => el('a', { href: `#${r.id}`, text: r.label, 'data-target': r.id }));
       fill($('#p-rail-list'), links.map(a => el('li', {}, a)));
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver(entries => {
-          entries.forEach(e => {
-            if (!e.isIntersecting) return;
-            links.forEach(a => a.toggleAttribute('aria-current', a.getAttribute('href') === `#${e.target.id}`));
-            links.forEach(a => { if (a.hasAttribute('aria-current')) a.setAttribute('aria-current', 'true'); });
-          });
-        }, { rootMargin: '-20% 0px -70% 0px' });
-        rail.forEach(r => io.observe(document.getElementById(r.id)));
-      }
+      const sections = rail.map(r => document.getElementById(r.id));
+      // Space taken by the sticky header (and the pinned tab row on small screens)
+      const offset = () => {
+        const header = $('.site-header')?.offsetHeight || 0;
+        const pinned = getComputedStyle(railEl).position === 'sticky' && window.innerWidth <= 960 ? railEl.offsetHeight : 0;
+        return header + pinned + 16;
+      };
+      let current = -1;
+      const setCurrent = i => {
+        if (i === current) return;
+        current = i;
+        links.forEach((a, k) => { if (k === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+        const a = links[i];
+        if (a && window.innerWidth <= 960) {
+          const ol = $('#p-rail-list');
+          ol.scrollTo({ left: a.parentElement.offsetLeft - 16, behavior: reduceMotion ? 'auto' : 'smooth' });
+        }
+      };
+      // Tapping a stage scrolls to it without changing the page address
+      links.forEach((a, i) => a.addEventListener('click', e => {
+        e.preventDefault();
+        // Measure layout position (not the animated position) so the stage lands just below the header
+        let top = 0;
+        for (let n = sections[i]; n; n = n.offsetParent) top += n.offsetTop;
+        top -= offset();
+        window.scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+        setCurrent(i);
+      }));
+      // The highlighted stage is the last one whose heading has passed the top third of the screen
+      let ticking = false;
+      const spy = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const line = offset() + window.innerHeight * 0.25;
+          let idx = 0;
+          sections.forEach((sec, k) => { if (sec.getBoundingClientRect().top <= line) idx = k; });
+          setCurrent(idx);
+          ticking = false;
+        });
+      };
+      window.addEventListener('scroll', spy, { passive: true });
+      window.addEventListener('resize', spy);
+      spy();
     }
 
     if (list.length > 1) {
@@ -574,6 +632,13 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     targets.forEach(t => io.observe(t));
+    // Safety net: anything on screen is revealed even if the observer missed it
+    let sweepT;
+    const sweep = () => { clearTimeout(sweepT); sweepT = setTimeout(() => {
+      targets.forEach(t => { if (!t.classList.contains('in') && t.getBoundingClientRect().top < window.innerHeight * 0.95) t.classList.add('in'); });
+    }, 120); };
+    window.addEventListener('scroll', sweep, { passive: true });
+    sweep();
 
     // Depth: gallery columns and hero colour fields drift at different speeds while scrolling
     const cols = () => $$('.g-col');

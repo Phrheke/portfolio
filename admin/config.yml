@@ -38,9 +38,9 @@ collections:
             min: 1
             max: 30
             summary: "{{fields.title}}"
-            hint: Between 6 and 12 images looks best. JPG, PNG or WebP, ideally 1600 to 2400 pixels on the long side and under 2 MB each.
+            hint: Between 6 and 12 images looks best; the first 12 show straight away and the rest behind a Show all button. JPG, PNG or WebP (iPhone HEIC photos won't display, export them as JPG first), ideally 1600 to 2400 pixels on the long side. Files over 15 MB are refused.
             fields:
-              - { name: image, label: Image, widget: image, choose_url: false, media_library: { max_file_size: 10000000 } }
+              - { name: image, label: Image, widget: image, choose_url: false, media_library: { max_file_size: 15000000 } }
               - name: title
                 label: Caption
                 widget: string
@@ -97,6 +97,7 @@ collections:
         widget: image
         required: false
         choose_url: false
+        media_library: { max_file_size: 15000000 }
         hint: Used on the project card (cropped to 4:3) and at the top of the page (shown whole). If empty, the first image in the project is used.
       - name: cover_focus
         label: Keep this part of the cover in view when cropped
@@ -154,7 +155,7 @@ collections:
             widget: object
             summary: "Image: {{fields.caption}}"
             fields:
-              - { name: image, label: Image, widget: image, choose_url: false }
+              - { name: image, label: Image, widget: image, choose_url: false, media_library: { max_file_size: 15000000 } }
               - { name: size, label: Width on the page, widget: select, default: wide, options: [{ label: Full width, value: full }, { label: Wide, value: wide }, { label: Same width as the text, value: normal }] }
               - { name: caption, label: Caption (optional), widget: string, required: false, pattern: ['^.{0,200}$', 'Up to 200 characters'] }
               - { name: alt, label: Describe the image (optional), widget: string, required: false, hint: For screen readers., pattern: ['^.{0,200}$', 'Up to 200 characters'] }
@@ -172,7 +173,7 @@ collections:
                 max: 12
                 summary: "{{fields.alt}}"
                 fields:
-                  - { name: image, label: Image, widget: image, choose_url: false }
+                  - { name: image, label: Image, widget: image, choose_url: false, media_library: { max_file_size: 15000000 } }
                   - { name: alt, label: Describe the image (optional), widget: string, required: false, pattern: ['^.{0,200}$', 'Up to 200 characters'] }
               - { name: caption, label: Caption (optional), widget: string, required: false, pattern: ['^.{0,200}$', 'Up to 200 characters'] }
           - name: quote
@@ -258,7 +259,7 @@ collections:
             collapsed: true
             fields:
               - { name: heading, label: Heading, widget: string, pattern: ['^.{0,60}$', 'Up to 60 characters'] }
-              - { name: photo, label: Your photo, widget: image, required: false, choose_url: false, hint: Shown in black and white, cropped to a portrait shape. }
+              - { name: photo, label: Your photo, widget: image, required: false, choose_url: false, media_library: { max_file_size: 15000000 }, hint: Shown in black and white, cropped to a portrait shape. }
               - { name: body, label: About you, widget: text, hint: Leave a blank line between paragraphs. Up to 1500 characters., pattern: ['^[\s\S]{0,1500}$', 'Up to 1500 characters'] }
               - { name: tools, label: Tools, widget: list, required: false, max: 20, hint: Separate with commas. }
               - name: experience
@@ -312,5 +313,5 @@ collections:
             fields:
               - { name: title, label: Browser tab and Google title, widget: string, pattern: ['^.{0,70}$', 'Up to 70 characters'] }
               - { name: description, label: Google description, widget: text, pattern: ['^[\s\S]{0,170}$', 'Up to 170 characters'] }
-              - { name: share_image, label: Image shown when your link is shared, widget: image, required: false, choose_url: false, hint: 1200 × 630 pixels works best. }
+              - { name: share_image, label: Image shown when your link is shared, widget: image, required: false, choose_url: false, media_library: { max_file_size: 15000000 }, hint: 1200 × 630 pixels works best. }
           - { name: image_cdn, label: Resize images automatically on Netlify, widget: boolean, default: true, hint: Keep this on. It makes large uploads load fast. }

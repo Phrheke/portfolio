@@ -73,6 +73,7 @@ function image(value, field) {
   if (!raw) return null;
   if (/^https?:\/\//i.test(raw)) return { src: raw, w: 0, h: 0, external: true };
   const clean = raw.replace(/^\.?\//, '');
+  if (/\.(heic|heif|tiff?|psd|ai|raw|cr2|nef)$/i.test(clean)) { warn(`${field}: "${raw}" is a format browsers can't show. Export it as JPG, PNG or WebP and upload again.`); return { src: clean, w: 0, h: 0, missing: true, unsupported: true }; }
   const file = join(ROOT, clean);
   if (!existsSync(file)) { warn(`${field}: image "${raw}" was not found, it will show as missing`); return { src: clean, w: 0, h: 0, missing: true }; }
   const size = imageSize(file);
