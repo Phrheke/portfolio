@@ -52,3 +52,15 @@ node scripts/build-content.mjs        # rebuild content/build/site-data.json aft
 python3 -m http.server 8000           # http://localhost:8000
 # Admin against local files: run `npx decap-server` in this folder, then open /admin
 ```
+
+## Video editing site
+
+Edited directly in `video/index.html` and `video/script.js`. It lives at `/video/` on the same site (e.g. `https://your-site.netlify.app/video/`). It is edited in code, not in the admin. Add a Formspree ID in place of `YOUR_FORM_ID` to receive messages, delete the grey template note, then:
+
+- [ ] **Raw vs edited clips** (the most important item): the site already plays two sample clips. Pick one 6–10 second moment from your own work and export it twice at the same length: once straight from the camera, once finished (graded, reframed, captioned). Use 1280×720, H.264 MP4, no audio, under 2 MB each. Save them over `video/assets/sample-raw.mp4` and `sample-edit.mp4`, and replace the two `-poster.jpg` stills with a frame from each. Optionally export `.webm` copies with the same names for older browsers.
+- [ ] **"What changed" list**: rewrite the four items for your real example (timecodes, seconds cut).
+- [ ] **The cut timeline**: edit the `clips` array in `video/script.js` with your real edit decisions (start and end seconds of each kept and cut section, and the order kept sections appear in the edit). The raw and edited lengths update automatically.
+- [ ] **Full reel**: upload a 60–90 second reel to YouTube and put its 11-character ID in `data-video="REEL_VIDEO_ID"`
+- [ ] **Each video**: put its YouTube ID in `data-video` (players only load when clicked) and set a real thumbnail as the button's `background-image`
+- [ ] Retention chart: replace the `retention` array in `video/script.js` with real numbers from YouTube Studio (Analytics → Engagement → Audience retention), with the creator's permission, and update the 34% → 52% sentence
+- [ ] Every result line under the videos

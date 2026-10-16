@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ndifreke Akpan, video editor for YouTube creators</title>
+<meta name="description" content="Retention-focused editing for YouTube creators and brands. Compare raw footage with the edit, then get a free test edit of your first minute.">
+<meta property="og:title" content="Ndifreke Akpan, video editor for YouTube creators">
+<meta property="og:description" content="Compare raw footage with the edit. First cut in 72 hours, free test edit of your first minute.">
+<meta name="theme-color" content="#0B0F1C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Delete this note once every sample video, channel name, quote and number is replaced with your own. -->
+<p class="template-note">This is a template. Videos, channel names, quotes and numbers are placeholders until you replace them (see README.md, "Video editing site").</p>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="#top" class="wordmark">Ndifreke Akpan</a>
+    <nav class="main-nav" aria-label="Main">
+      <a href="#compare">Raw vs edit</a>
+      <a href="#work">Work</a>
+      <a href="#prices">Prices</a>
+      <a href="#process">Process</a>
+      <span class="nav-marker" aria-hidden="true"></span>
+    </nav>
+    <a href="#contact" class="btn btn-primary btn-sm">Get a free test edit</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero" id="compare">
+    <span class="glow glow-a" aria-hidden="true"></span><span class="glow glow-b" aria-hidden="true"></span><span class="glow glow-c" aria-hidden="true"></span>
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1>I turn long, messy recordings into videos people watch to the end.</h1>
+        <div class="hero-side">
+          <p class="lead">Editing for YouTube creators and brands. Drag the line across the frame to compare the raw footage with my edit.</p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Get a free test edit</a>
+            <button type="button" class="btn btn-quiet" data-video="REEL_VIDEO_ID" data-title="75-second showreel">Watch the 75-second reel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare">
+        <div class="viewer">
+          <!-- Raw vs edited: two muted clips of the same moment, kept in sync. Replace the sample files in assets/ with your own (same names). -->
+          <div class="ba" data-ba style="--pos:50%">
+            <div class="ba-layer ba-raw">
+              <video class="clip-raw" muted loop playsinline autoplay preload="auto" poster="assets/sample-raw-poster.jpg" aria-hidden="true">
+                <source src="assets/sample-raw.mp4" type="video/mp4">
+                <source src="assets/sample-raw.webm" type="video/webm">
+              </video>
+            </div>
+            <div class="ba-layer ba-edit">
+              <video class="clip-edit" muted loop playsinline autoplay preload="auto" poster="assets/sample-edit-poster.jpg" aria-hidden="true">
+                <source src="assets/sample-edit.mp4" type="video/mp4">
+                <source src="assets/sample-edit.webm" type="video/webm">
+              </video>
+            </div>
+            <button type="button" class="big-play" aria-label="Play the raw and edited clips"><span></span></button>
+            <span class="ba-tag ba-tag-raw">Raw footage</span>
+            <span class="ba-tag ba-tag-edit">My edit</span>
+            <span class="ba-handle" aria-hidden="true"><span></span></span>
+            <input class="ba-range" type="range" min="0" max="100" value="50" step="1" aria-label="Compare raw footage and the edit. Move left to see more of the edit.">
+          </div>
+          <div class="viewer-bar">
+            <button type="button" class="play-both" aria-pressed="false">Play both</button>
+            <p class="viewer-note">Sample clip. Replace it with your own raw footage and your edit of it.</p>
+          </div>
+        </div>
+
+        <div class="changes-wrap">
+          <h2 class="changes-title">What changed</h2>
+          <ol class="changes">
+            <li><button type="button" class="change" data-view="edit" data-hl="hook"><span class="tc">0:00</span><span><strong>The best line opens the video.</strong> It was at 2:14 in the raw recording.</span></button></li>
+            <li><button type="button" class="change" data-view="raw" data-hl="cut"><span class="tc">2:22</span><span><strong>2 minutes 22 seconds cut.</strong> Warm-up, retakes, pauses and a tangent, all gone.</span></button></li>
+            <li><button type="button" class="change" data-view="edit" data-hl="keep"><span class="tc">0:58</span><span><strong>Same points in 58 seconds.</strong> Something changes on screen every 4 to 6 seconds.</span></button></li>
+            <li><button type="button" class="change" data-wipe="12"><span class="tc">0:04</span><span><strong>Dead air replaced with a graphic.</strong> The pause in the raw take becomes a chart that makes the point.</span></button></li>
+            <li><button type="button" class="change" data-wipe="15"><span class="tc">look</span><span><strong>Colour, punch-in and captions.</strong> Flat camera footage graded, reframed, and captioned for sound-off viewing.</span></button></li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- The cut: the same recording as a timeline, before and after the edit. -->
+      <div class="cut" aria-labelledby="cut-title">
+        <div class="cut-head">
+          <h2 id="cut-title" class="cut-title">The cut, on a timeline</h2>
+          <div class="seg" role="group" aria-label="Timeline view">
+            <button type="button" class="seg-btn" data-view="raw" aria-pressed="false">Raw, 3:20</button>
+            <button type="button" class="seg-btn" data-view="edit" aria-pressed="true">Edited, 0:58</button>
+          </div>
+        </div>
+        <div class="cut-track" id="cut-track" aria-hidden="true"></div>
+        <div class="cut-axis" aria-hidden="true"><span>0:00</span><span id="cut-end">0:58</span></div>
+        <ul class="cut-legend" aria-hidden="true">
+          <li><span class="key key-keep"></span>Kept</li>
+          <li><span class="key key-hook"></span>Opening line, moved to the start</li>
+          <li><span class="key key-cut"></span>Cut</li>
+        </ul>
+        <p class="visually-hidden" id="cut-summary">The raw recording is 3 minutes 20 seconds. Five kept moments, 58 seconds in total, make the edit. The line from 2:14 now opens the video.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="result" aria-labelledby="result-title">
+    <div class="wrap result-grid">
+      <div class="result-copy">
+        <h2 id="result-title">What that did to retention</h2>
+        <p>The Money Desk's average view duration went from 34% to 52% across the ten videos after I started, compared with the ten before.</p>
+        <details class="chart-table">
+          <summary>Show the numbers as a table</summary>
+          <div class="table-scroll">
+            <table id="chart-table"><thead><tr><th scope="col">Point in video</th><th scope="col">Before</th><th scope="col">With my edits</th></tr></thead><tbody></tbody></table>
+          </div>
+        </details>
+      </div>
+      <!-- Sample data. Replace with a real YouTube Studio retention curve, with the creator's permission. -->
+      <figure class="chart-card">
+        <figcaption class="chart-legend">
+          <span><span class="key key-after"></span>With my edits</span>
+          <span><span class="key key-before"></span>Before</span>
+        </figcaption>
+        <div class="chart-wrap" id="chart"></div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="work" id="work">
+    <div class="wrap">
+      <div class="work-head">
+        <h2>More work, by format</h2>
+        <div class="tabs" role="tablist" aria-label="Video format">
+          <button type="button" role="tab" class="tab" id="tab-long" aria-selected="true" aria-controls="panel-long">YouTube videos</button>
+          <button type="button" role="tab" class="tab" id="tab-short" aria-selected="false" aria-controls="panel-short" tabindex="-1">Shorts and Reels</button>
+          <button type="button" role="tab" class="tab" id="tab-ads" aria-selected="false" aria-controls="panel-ads" tabindex="-1">Ads</button>
+          <span class="tab-marker" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <!-- Replace each thumbnail with the real one (set background-image on the button) and put the YouTube ID in data-video. -->
+      <div class="panel" id="panel-long" role="tabpanel" aria-labelledby="tab-long">
+        <div class="grid-wide">
+          <article class="vid">
+            <button type="button" class="thumb t1" data-video="VIDEO_ID_1" data-title="Why your salary never feels like enough"><span class="thumb-title">Why your salary never feels like enough</span><span class="dur">14:32</span></button>
+            <h3>The Money Desk, finance explainer</h3>
+            <p>41 minutes of talking cut to 14, with a graphic for every number mentioned. 1.9 million views.</p>
+          </article>
+          <article class="vid">
+            <button type="button" class="thumb t2" data-video="VIDEO_ID_2" data-title="Jollof for 50 people"><span class="thumb-title">Jollof for 50 people</span><span class="dur">11:08</span></button>
+            <h3>Chef Amara, cooking vlog</h3>
+            <p>A cold open, sound design and on-screen recipe steps. The channel's most-watched video of 2025.</p>
+          </article>
+          <article class="vid">
+            <button type="button" class="thumb t3" data-video="VIDEO_ID_3" data-title="I built a house for ₦12M"><span class="thumb-title">I built a house for ₦12M</span><span class="dur">22:47</span></button>
+            <h3>BuildWithTobi, documentary</h3>
+            <p>Six months of site footage shaped into a three-part story. 2.4 million views and 31,000 new subscribers.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-short" role="tabpanel" aria-labelledby="tab-short" hidden>
+        <div class="grid-tall">
+          <article class="vid"><button type="button" class="thumb thumb-tall t4" data-video="SHORT_ID_1" data-title="3 money rules"><span class="thumb-title">3 money rules nobody told you</span><span class="dur">0:41</span></button><h3>The Money Desk</h3><p>4.1 million views</p></article>
+          <article class="vid"><button type="button" class="thumb thumb-tall t5" data-video="SHORT_ID_2" data-title="Pepper soup in 60 seconds"><span class="thumb-title">Pepper soup in 60 seconds</span><span class="dur">0:58</span></button><h3>Chef Amara</h3><p>2.2 million views</p></article>
+          <article class="vid"><button type="button" class="thumb thumb-tall t6" data-video="SHORT_ID_3" data-title="Day 1 vs day 180"><span class="thumb-title">Day 1 vs day 180</span><span class="dur">0:29</span></button><h3>Lagos Fit</h3><p>1.3 million views</p></article>
+          <article class="vid"><button type="button" class="thumb thumb-tall t7" data-video="SHORT_ID_4" data-title="What a free site visit costs you"><span class="thumb-title">What a free site visit costs you</span><span class="dur">0:47</span></button><h3>BuildWithTobi</h3><p>960,000 views</p></article>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-ads" role="tabpanel" aria-labelledby="tab-ads" hidden>
+        <div class="grid-wide">
+          <article class="vid">
+            <button type="button" class="thumb t8" data-video="AD_ID_1" data-title="Send money in 3 taps"><span class="thumb-title">Send money in 3 taps</span><span class="dur">0:30</span></button>
+            <h3>Fintech app launch ad</h3>
+            <p>Three opening hooks cut from one shoot for testing. The winning hook got a 2.1% click-through rate.</p>
+          </article>
+          <article class="vid">
+            <button type="button" class="thumb t9" data-video="AD_ID_2" data-title="January starts now"><span class="thumb-title">January starts now</span><span class="dur">0:15</span></button>
+            <h3>Lagos Fit membership promo</h3>
+            <p>Vertical and square cuts delivered in 48 hours. 420 sign-ups in three weeks.</p>
+          </article>
+          <article class="vid">
+            <button type="button" class="thumb t10" data-video="AD_ID_3" data-title="I stopped overspending"><span class="thumb-title">“I stopped overspending”</span><span class="dur">0:45</span></button>
+            <h3>Budgeting app, customer story ad</h3>
+            <p>Phone-shot testimonials turned into a finished ad with captions and b-roll. Cost per install fell 38%.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="prices" id="prices">
+    <div class="wrap">
+      <div class="prices-head">
+        <h2>Monthly packages</h2>
+        <p>Most creators book a month at a time so uploads never slip. One-off videos are fine too. Two rounds of changes and Frame.io review are always included.</p>
+      </div>
+      <div class="price-list" role="list">
+        <div class="price-row" role="listitem">
+          <h3>Weekly YouTube</h3>
+          <p class="price-what">4 videos up to 20 minutes, story structure, graphics and b-roll, plus 8 Shorts cut from them.</p>
+          <p class="price-time">First cut in 72 hours</p>
+          <p class="price-amount">from $1,200 a month</p>
+          <a href="#contact" class="price-link" data-project="Weekly YouTube package">Ask about weekly YouTube</a>
+        </div>
+        <div class="price-row" role="listitem">
+          <h3>Shorts only</h3>
+          <p class="price-what">12 Shorts or Reels a month with captions, zooms and sound design, cut from your long videos or raw clips.</p>
+          <p class="price-time">48 hours per batch</p>
+          <p class="price-amount">from $400 a month</p>
+          <a href="#contact" class="price-link" data-project="Shorts / Reels package">Ask about Shorts</a>
+        </div>
+        <div class="price-row" role="listitem">
+          <h3>Ads</h3>
+          <p class="price-what">15 to 60 second ads with three opening hooks to test, exported in vertical, square and wide.</p>
+          <p class="price-time">48 hours</p>
+          <p class="price-amount">from $300 a video</p>
+          <a href="#contact" class="price-link" data-project="Ad / brand video">Ask about ads</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="process" id="process">
+    <div class="wrap">
+      <h2>From raw footage to upload in six days</h2>
+      <ol class="track">
+        <li><p class="track-day">Day 0</p><h3>You send footage</h3><p>Upload to Google Drive or Dropbox and add a voice note about what the video should do.</p></li>
+        <li><p class="track-day">Day 3</p><h3>First cut</h3><p>You watch it on Frame.io and leave comments on the exact frame you want changed.</p></li>
+        <li><p class="track-day">Day 5</p><h3>Changes</h3><p>Two rounds are included. Most videos are done after one.</p></li>
+        <li><p class="track-day">Day 6</p><h3>Ready to upload</h3><p>A 4K export, a captions file and a thumbnail still.</p></li>
+      </ol>
+      <p class="tools">I edit in Premiere Pro, After Effects and DaVinci Resolve.</p>
+    </div>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+      <h2 id="faq-title">Questions creators ask</h2>
+      <div class="faq-list">
+        <details><summary>How fast do I get the first cut?</summary><div class="faq-body"><p>72 hours for long videos, 48 for Shorts and ads. Monthly clients get a fixed weekly slot.</p></div></details>
+        <details><summary>Can I try you before paying for a month?</summary><div class="faq-body"><p>Yes. Send a sample and I'll edit the first minute free, or book one video on its own.</p></div></details>
+        <details><summary>Do you make thumbnails and write titles?</summary><div class="faq-body"><p>Every long video comes with a thumbnail still and three title options. Full thumbnail design is an add-on.</p></div></details>
+        <details><summary>Will the music get my video claimed?</summary><div class="faq-body"><p>No. I use licensed tracks from Epidemic Sound and Artlist that are cleared for monetised YouTube channels.</p></div></details>
+        <details><summary>How do I pay?</summary><div class="faq-body"><p>Monthly packages are paid at the start of each month. One-off videos are 50% up front. Bank transfer, Wise or PayPal.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <!-- Real quotes only: name, channel, size. -->
+      <figure class="quote-lead">
+        <blockquote>“Average view duration went from 4 minutes to over 7. I stopped editing and started filming twice as much.”</blockquote>
+        <figcaption>Tunde M., The Money Desk, 1.2 million subscribers</figcaption>
+      </figure>
+
+      <div class="contact-grid">
+        <div class="contact-copy">
+          <h2>Get a free test edit</h2>
+          <p>Send your channel and a sample. If we're a fit, I'll edit the first minute free so you can judge it before you pay anything.</p>
+          <p class="contact-alt">Prefer chatting? <a href="https://www.instagram.com/fr3k3h.exe/" target="_blank" rel="noopener me">Message me on Instagram</a>.</p>
+          <figure class="quote-small">
+            <blockquote>“Never misses an upload day, and actually gets my sense of humour.”</blockquote>
+            <figcaption>Amara O., Chef Amara, 640,000 subscribers</figcaption>
+          </figure>
+        </div>
+
+        <!-- Connect a form service: create a free form at formspree.io and replace YOUR_FORM_ID. -->
+        <form class="contact-form" id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+          <div class="form-fields">
+            <div class="field">
+              <label for="f-name">Your name</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-err">
+              <p class="field-error" id="f-name-err"><span>Add your name so I know who to reply to.</span></p>
+            </div>
+            <div class="field">
+              <label for="f-email">Email</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-err">
+              <p class="field-error" id="f-email-err"><span>Enter an email like name@channel.com.</span></p>
+            </div>
+            <div class="field">
+              <label for="f-type">What do you need?</label>
+              <select id="f-type" name="project_type" required aria-describedby="f-type-err">
+                <option value="" selected disabled>Choose one</option>
+                <option>Weekly YouTube package</option>
+                <option>Shorts / Reels package</option>
+                <option>Ad / brand video</option>
+                <option>One video</option>
+              </select>
+              <p class="field-error" id="f-type-err"><span>Pick the closest option.</span></p>
+            </div>
+            <div class="field">
+              <label for="f-msg">Your channel and a link to a sample</label>
+              <textarea id="f-msg" name="message" rows="4" placeholder="youtube.com/@yourchannel, I post twice a week, about 15 minutes each" required aria-describedby="f-msg-err"></textarea>
+              <p class="field-error" id="f-msg-err"><span>Add your channel or a link to some footage.</span></p>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="f-submit"><span class="btn-label">Send for a free test edit</span><span class="spinner" aria-hidden="true"></span></button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+          <div class="form-done" id="form-done" hidden tabindex="-1">
+            <h3>Sent. Your test edit is in the queue.</h3>
+            <p>I'll reply within a day with where to upload your sample.</p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>© <span id="year">2026</span> Ndifreke Akpan</p>
+    <p><a href="https://www.instagram.com/fr3k3h.exe/" target="_blank" rel="noopener me">Instagram</a></p>
+  </div>
+</footer>
+
+<!-- Video player: YouTube loads only when someone presses play. -->
+<div class="lightbox" id="lightbox" hidden>
+  <div class="lightbox-inner" role="dialog" aria-modal="true" aria-label="Video player">
+    <button type="button" class="lightbox-close" id="lightbox-close">Close</button>
+    <div class="lightbox-frame" id="lightbox-frame"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
